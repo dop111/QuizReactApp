@@ -1,0 +1,44 @@
+#StartQuizButton {
+    border-radius: 15px;
+    background: #4D5B9E;
+    width: 193px;
+    height: 52px;
+    color: #F5F7FB;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    margin: auto;
+    display:block;
+}
+
+#StartQuizButton:hover {
+    cursor: pointer;
+    background: #8893c5;
+}
+
+#StartQuizTitle {
+    color: #293264;
+    text-align: center;
+    font-family: Karla;
+    font-size: 31.25px;
+    font-weight: 700;
+}
+
+#StartQuizDescription {
+    color: #293264;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+#StartQuizContainer {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+}
