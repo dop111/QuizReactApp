@@ -7,21 +7,21 @@
     padding-bottom: 20px;
 }
 
-.quiz {
-    width: 60%;
-    max-width: max-content;
+.quiz hr {
+    border-top: 1px solid #DBDEF0;
+    margin-left: 0;
 }
 
-.quiz-line {
-    border-top: 1px solid #DBDEF0;
-    width: 60%;
-    margin-left: 0;
+.quiz h2 {
+    color: #293264;
+    font-family: Karla;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .answer-option {
     border: 0.794px solid #4D5B9E;
     border-radius: 7.942px;
-    background-color: #F5F7FB;
     width: auto;
     min-width: 65.922px;
     height: 20.65px;
@@ -36,14 +36,7 @@
 
 .answer-option:hover {
     cursor: pointer;
-    background-color: #D6DBF5;
+    background: #D6DBF5;
     border: 0.794px solid #D6DBF5;
-}
-
-.quiz h2 {
-    color: #293264;
-    font-family: Karla;
-    font-size: 16px;
-    font-weight: 700;
 }
 

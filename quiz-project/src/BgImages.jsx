@@ -4,8 +4,8 @@ import bgGraphics2 from "./assets/backgroundGraphics2.svg"
 export function BgImages() {
     return (
         <>
-            <img id="bg1" style = {{position: "absolute", top: 0, right: 0}} src = {bgGraphics1} />
-            <img id="bg2" style = {{position: "absolute", bottom: 0, left: 0}} src = {bgGraphics2} />
+            <img id="bg1" style = {{position: "fixed", top: 0, right: 0,zIndex:-5}} src = {bgGraphics1} />
+            <img id="bg2" style = {{position: "fixed", bottom: 0, left: 0,zIndex:-5}} src = {bgGraphics2} />
         </>
     )
 }

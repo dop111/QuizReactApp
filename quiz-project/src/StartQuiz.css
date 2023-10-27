@@ -14,12 +14,14 @@
     font-family: Karla;
     font-size: 31.25px;
     font-weight: 700;
+    margin:3.5 0 3.5 0;
 }
 
 #StartQuizContainer h3 {
     font-family: Inter;
     font-size: 16px;
     font-weight: 400;
+    margin:3.5 0 3.5 0;
 }
 
 #StartQuizContainer button {
@@ -32,7 +34,7 @@
     font-size: 16px;
     font-weight: 500;
     border: none;
-    margin: auto;
+    margin: 29px auto auto auto;
     display:block;
 }
 
