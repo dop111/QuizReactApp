@@ -1,7 +1,8 @@
 import { useState } from "react"
 import "./QuizQuestions.css"
+import QuizQuestion from "./QuizQuestion"
 
-function QuizQuestionResult(props) {
+function QuizResult(props) {
 
     const [answersChecked,setAnswersChecked] = useState(false)
 
@@ -19,10 +20,49 @@ function QuizQuestionResult(props) {
 }
 
 export function QuizQuestions(props) {
+
+    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
+    
+    function selectAnswer(questionParam, answer) {
+        function selectAnswerOnQuestionHelper(question,answer) {
+            return (
+                {
+                    ...question,
+                    correct_answer: question.correct_answer.answer==answer.answer?selectAnswer(question.correct_answer):question.correct_answer,
+                    incorrect_answers: selectAnswerFromArrayHelper(question.incorrect_answers,answer)
+                }
+            )
+        }
+        
+        function selectAnswerFromArrayHelper(answers, selectedAnswer) {
+            return (answers.map(
+                (answer) => answer.answer==selectedAnswer.answer?selectAnswerHelper(answer):answer
+            ))
+        }
+
+        function selectAnswerHelper(answer) {
+            return {...answer, isSelected:!answer.isSelected}
+        }
+
+        setQuizQuestionObjects(
+            (displayableQs) => displayableQs.map(
+                (q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q
+            )
+        )
+    }
+
+    function makeQuestionComponents() {
+        return props.quizQuestions.map(
+            (question) => {
+                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswer} />
+            }
+        )
+    }
+
     return (
         <div className="quizQuestions">
-            {props.quizQuestions}
-            <QuizQuestionResult nbrOfQuestions={props.quizQuestions.length}/>
+            {makeQuestionComponents()}
+            <QuizResult nbrOfQuestions={props.quizQuestions.length}/>
         </div>
     )
 }
