@@ -1,15 +1,24 @@
 import "./QuizQuestion.css"
 import ReactHtmlParser from 'html-react-parser';
+import { useState } from "react"
 
 function AnswerOption(props) {
 
+    const [selected, setSelected] = useState(props.isSelected)
+
+    function changeSelected() {
+        setSelected(
+            (prevSelected) => !prevSelected
+        )
+    }
+
     const heldStyle = {
-        backgroundColor: props.isSelected?"#D6DBF5":"#F5F7FB",
-        borderStyle: props.isSelected?"0.794px solid #D6DBF5":"0.794px solid #F5F7FB"
+        backgroundColor: selected?"#D6DBF5":"#F5F7FB",
+        borderStyle: selected?"0.794px solid #D6DBF5":"0.794px solid #F5F7FB"
     }
 
     return (
-        <button className="answer-option" onClick={()=>props.holdAnswer(props.question,props.answer)} style={heldStyle}>{ReactHtmlParser(props.answer.answer)}</button>
+        <button className="answer-option" onClick={()=>props.holdAnswer(props.question,props.answer,changeSelected)} style={heldStyle}>{ReactHtmlParser(props.answer.answer)}</button>
     )
 }
 

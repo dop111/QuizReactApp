@@ -23,7 +23,7 @@ export function QuizQuestions(props) {
 
     const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
     
-    function selectAnswer(questionParam, answer) {
+    function selectAnswer(questionParam, answer, setBtnStyleCallBack) {
         function selectAnswerOnQuestionHelper(question,answer) {
             return (
                 {
@@ -45,9 +45,10 @@ export function QuizQuestions(props) {
         }
 
         setQuizQuestionObjects(
-            (displayableQs) => displayableQs.map(
-                (q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q
-            )
+            (displayableQs) => {
+                setBtnStyleCallBack()
+                displayableQs.map((q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q)
+            }
         )
     }
 
