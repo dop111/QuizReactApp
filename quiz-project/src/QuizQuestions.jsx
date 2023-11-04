@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import "./QuizQuestions.css"
 import QuizQuestion from "./QuizQuestion"
 
@@ -21,9 +21,13 @@ function QuizResult(props) {
 
 export function QuizQuestions(props) {
 
-    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
-    
-    function selectAnswer(questionParam, answer, setBtnStyleCallBack) {
+    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(() => props.quizQuestions)
+
+    const selectAnswerCallback = useCallback(
+        (q,a,prevState) => selectAnswer(q,a,prevState),quizQuestionDisplayable
+    )
+
+    function selectAnswer(questionParam, answer, stateToUpdate) {
         function selectAnswerOnQuestionHelper(question,answer) {
             return (
                 {
@@ -45,17 +49,14 @@ export function QuizQuestions(props) {
         }
 
         setQuizQuestionObjects(
-            (displayableQs) => {
-                setBtnStyleCallBack()
-                displayableQs.map((q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q)
-            }
+            stateToUpdate.map((q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q)
         )
     }
 
     function makeQuestionComponents() {
-        return props.quizQuestions.map(
+        return quizQuestionDisplayable.map(
             (question) => {
-                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswer} />
+                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswerCallback} prevState = {props.quizQuestions} />
             }
         )
     }
@@ -63,7 +64,7 @@ export function QuizQuestions(props) {
     return (
         <div className="quizQuestions">
             {makeQuestionComponents()}
-            <QuizResult nbrOfQuestions={props.quizQuestions.length}/>
+            <QuizResult nbrOfQuestions={quizQuestionDisplayable.length}/>
         </div>
     )
 }

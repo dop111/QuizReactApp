@@ -24,12 +24,14 @@ export function App() {
             )
         )
     }
+    
+    //Race condition? useEffect is run after rendering so
 
     useEffect(
         () => {
             fetch("https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple")
             .then((res)=>res.json())
-            .then((data) => console.log(setQuestions(changeRawQsToDisplayable(data.results))))
+            .then((data) => setQuestions(changeRawQsToDisplayable(data.results)))
         }
     ,[])
 
