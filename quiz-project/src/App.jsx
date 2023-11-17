@@ -29,11 +29,28 @@ export function App() {
 
     useEffect(
         () => {
-            fetch("https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple")
-            .then((res)=>res.json())
-            .then((data) => setQuestions(changeRawQsToDisplayable(data.results)))
+            const abortController = new AbortController();
+
+            const fetchQuestions = async () => {
+                try {
+                    const res = await fetch("https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple", {signal : abortController.signal})
+                    console.log(res)
+                    setQuestions(() => changeRawQsToDisplayable(res.results))
+                } catch (error) {
+                    // ℹ️: The error name is "CanceledError" for Axios.
+                    if (error.name !== "AbortError") {
+                        /* Logic for non-aborted error handling goes here. */
+                    }
+                }
+            }
+
+            fetchQuestions()
+
+            return () => abortController.abort();
         }
     ,[])
+
+    console.log("App Rendered, qustions fetched: " + !!questions)
 
     return (
         <>

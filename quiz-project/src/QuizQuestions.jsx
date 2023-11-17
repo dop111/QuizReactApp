@@ -21,7 +21,9 @@ function QuizResult(props) {
 
 export function QuizQuestions(props) {
 
-    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(() => props.quizQuestions)
+    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
+
+    console.log("QuizQuestions Rendered")
 
     const selectAnswerCallback = useCallback(
         (q,a,prevState) => selectAnswer(q,a,prevState),quizQuestionDisplayable
