@@ -56,8 +56,6 @@ export function App() {
         <>
             <BgImages/>
             {/* <StartQuiz/> */}
-
-            {console.log("App Rendered, qustions fetched: " + !!questions)}
             <QuizQuestions quizQuestions={questions}/>
         </>
     )

@@ -1,8 +1,10 @@
-import { useState, useCallback } from "react"
+import { useState, useEffect } from "react"
 import "./QuizQuestions.css"
 import QuizQuestion from "./QuizQuestion"
 
 function QuizResult(props) {
+
+    console.log("QuizResult Rendered")
 
     const [answersChecked,setAnswersChecked] = useState(false)
 
@@ -23,13 +25,14 @@ export function QuizQuestions(props) {
 
     const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
 
-    console.log("QuizQuestions Rendered")
+    //Update the state (useState will only initialize the first time around - this will make sure it's updated even if it's null first time)
+    useEffect(() => {
+        if (props.quizQuestions) {
+            setQuizQuestionObjects(props.quizQuestions);
+        }
+      }, [props.quizQuestions])
 
-    const selectAnswerCallback = useCallback(
-        (q,a,prevState) => selectAnswer(q,a,prevState),quizQuestionDisplayable
-    )
-
-    function selectAnswer(questionParam, answer, stateToUpdate) {
+    function selectAnswer(questionParam, answer) {
         function selectAnswerOnQuestionHelper(question,answer) {
             return (
                 {
@@ -51,14 +54,16 @@ export function QuizQuestions(props) {
         }
 
         setQuizQuestionObjects(
-            stateToUpdate.map((q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q)
+            (stateToUpdate) => {
+                return stateToUpdate.map((q)=> q.question == questionParam.question?selectAnswerOnQuestionHelper(questionParam,answer):q)
+            }
         )
     }
 
     function makeQuestionComponents() {
         return quizQuestionDisplayable.map(
             (question) => {
-                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswerCallback} prevState = {props.quizQuestions} />
+                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswer} />
             }
         )
     }

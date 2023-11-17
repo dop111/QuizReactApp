@@ -4,23 +4,22 @@ import { useState } from "react"
 
 function AnswerOption(props) {
 
-    const selectedStyle = {
+    console.log("AnswerOption Rendered")
+
+    const style = props.isSelected?{
         backgroundColor: "#D6DBF5",
         borderStyle: "0.794px solid #D6DBF5"
-    }
-
-    const defaultStyle = {
+    }:{
         backgroundColor: "#F5F7FB",
         borderStyle: "0.794px solid #F5F7FB"
     }
 
     function handleClick(e) {
-        console.log(e.traget)
-        props.holdAnswer(props.question,props.answer,props.prevState)
+        props.holdAnswer(props.question,props.answer)
     }
 
     return (
-        <button className="answer-option" onClick={handleClick} style={props.isSelected?selectedStyle:defaultStyle}>{ReactHtmlParser(props.answer.answer)}</button>
+        <button className="answer-option" onClick={(error) => handleClick(error)} style={style}>{ReactHtmlParser(props.answer.answer)}</button>
     )
 }
 
@@ -28,7 +27,7 @@ export default function QuizQuestion(props) {
 
     const answers = props.question.incorrect_answers.concat([props.question.correct_answer])
     const answerComponents = answers.map((possibleAnswer) => <AnswerOption key={ReactHtmlParser(possibleAnswer.answer)} answer={possibleAnswer} isSelected={possibleAnswer.isSelected}
-    holdAnswer={props.selectAnswer} question={props.question} prevState={props.prevState}/>)
+    holdAnswer={props.selectAnswer} question={props.question}/>)
 
     return (
         <>
