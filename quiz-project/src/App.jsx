@@ -13,6 +13,9 @@ export function App() {
     }
 
     function changeRawQsToDisplayable(rawQs) {
+        if (rawQs === undefined) {
+            return
+        }
         return (rawQs.map(
             (rawQuestion) => {
                 return {
@@ -34,8 +37,7 @@ export function App() {
             const fetchQuestions = async () => {
                 try {
                     const res = await fetch("https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple", {signal : abortController.signal})
-                    console.log(res)
-                    setQuestions(() => changeRawQsToDisplayable(res.results))
+                    res.json().then((data) => setQuestions(() => changeRawQsToDisplayable(data.results)))
                 } catch (error) {
                     // ℹ️: The error name is "CanceledError" for Axios.
                     if (error.name !== "AbortError") {
@@ -50,12 +52,12 @@ export function App() {
         }
     ,[])
 
-    console.log("App Rendered, qustions fetched: " + !!questions)
-
     return (
         <>
             <BgImages/>
             {/* <StartQuiz/> */}
+
+            {console.log("App Rendered, qustions fetched: " + !!questions)}
             <QuizQuestions quizQuestions={questions}/>
         </>
     )
