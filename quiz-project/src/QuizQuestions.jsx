@@ -4,8 +4,6 @@ import QuizQuestion from "./QuizQuestion"
 
 function QuizResult(props) {
 
-    console.log("QuizResult Rendered")
-
     const [answersChecked,setAnswersChecked] = useState(false)
 
     function changeAnswersState() {
@@ -37,7 +35,7 @@ export function QuizQuestions(props) {
             return (
                 {
                     ...question,
-                    correct_answer: question.correct_answer.answer==answer.answer?selectAnswer(question.correct_answer):question.correct_answer,
+                    correct_answer: question.correct_answer.answer==answer.answer?selectAnswerHelper(question.correct_answer):question.correct_answer,
                     incorrect_answers: selectAnswerFromArrayHelper(question.incorrect_answers,answer)
                 }
             )
