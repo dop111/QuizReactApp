@@ -12,24 +12,43 @@ export function App() {
         return {answer:s,isSelected:false}
     }
 
+    //Fisher-Yates (aka Knuth) Shuffle algorithm
+    function shuffle(array) {
+        let currentIndex = array.length,  randomIndex;
+      
+        // While there remain elements to shuffle.
+        while (currentIndex > 0) {
+      
+          // Pick a remaining element.
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+      
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+    }
+
     function changeRawQsToDisplayable(rawQs) {
         if (rawQs === undefined) {
             return
         }
+
         return (rawQs.map(
             (rawQuestion) => {
                 return {
                     ...rawQuestion,
-                    correct_answer: turnAnswerToObjectHelper(rawQuestion.correct_answer),
-                    incorrect_answers: rawQuestion.incorrect_answers.map((ans)=>turnAnswerToObjectHelper(ans))
+                    allAnswersShuffled : shuffle(rawQuestion.incorrect_answers.map((ans)=>turnAnswerToObjectHelper(ans)).concat([turnAnswerToObjectHelper(rawQuestion.correct_answer)])),
+                    getSelectedAnswer() { return this.allAnswersShuffled.filter((a)=>a.isSelected)}
                     }
                 }   
             )
         )
     }
-    
-    //Race condition? useEffect is run after rendering so
 
+    //Abort on first call if useEffect is called twice (i.e. strictMode) - avoid API throwing "Too many requests" error
     useEffect(
         () => {
             const abortController = new AbortController();

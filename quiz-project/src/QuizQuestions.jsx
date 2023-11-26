@@ -4,24 +4,31 @@ import QuizQuestion from "./QuizQuestion"
 
 function QuizResult(props) {
 
-    const [answersChecked,setAnswersChecked] = useState(false)
+    function clickHandler() {
+        props.scoreFunction((prevScored) => !prevScored)
+    }
 
-    function changeAnswersState() {
-        setAnswersChecked((checked) => !checked)
+    function countCorrect() {
+        return props.questions.filter(
+            (q)=>{
+                return q.getSelectedAnswer()[0].answer === q.correct_answer
+            }
+        ).length
     }
 
     return (
         <div id="resultsContainer">
-            {!answersChecked&&<button type="button" id="checkAnswerBtn" onClick={changeAnswersState}>Check answers</button>}
-            {answersChecked&&<h3 id="resultsText">You scored 3/{props.nbrOfQuestions} correct answers</h3>}
-            {answersChecked&&<button id="resultsPlayAgainBtn" type="button" onClick={changeAnswersState}>Play again</button>}
+            {!props.scored&&<button type="button" id="checkAnswerBtn" onClick={clickHandler}>Check answers</button>}
+            {props.scored&&<h3 id="resultsText">You scored {countCorrect()}/{props.questions.length} correct answers</h3>}
+            {props.scored&&<button id="resultsPlayAgainBtn" type="button" onClick={clickHandler}>Play again</button>}
         </div>
     )
 }
 
 export function QuizQuestions(props) {
 
-    const [quizQuestionDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
+    const [quizQuestionsDisplayable, setQuizQuestionObjects] = useState(props.quizQuestions)
+    const [isScored, setIsScored] = useState(false)
 
     //Update the state (useState will only initialize the first time around - this will make sure it's updated even if it's null first time)
     useEffect(() => {
@@ -35,15 +42,14 @@ export function QuizQuestions(props) {
             return (
                 {
                     ...question,
-                    correct_answer: question.correct_answer.answer==answer.answer?selectAnswerHelper(question.correct_answer):question.correct_answer,
-                    incorrect_answers: selectAnswerFromArrayHelper(question.incorrect_answers,answer)
+                    allAnswersShuffled : selectAnswerFromArrayHelper(question.allAnswersShuffled,answer)
                 }
             )
         }
         
         function selectAnswerFromArrayHelper(answers, selectedAnswer) {
             return (answers.map(
-                (answer) => answer.answer==selectedAnswer.answer?selectAnswerHelper(answer):answer
+                (answer) => answer.answer==selectedAnswer.answer?selectAnswerHelper(answer):{...answer, isSelected:false}
             ))
         }
 
@@ -59,9 +65,9 @@ export function QuizQuestions(props) {
     }
 
     function makeQuestionComponents() {
-        return quizQuestionDisplayable.map(
+        return quizQuestionsDisplayable.map(
             (question) => {
-                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswer} />
+                return <QuizQuestion key={question.question} question={question} selectAnswer={selectAnswer} isScored={isScored} />
             }
         )
     }
@@ -69,7 +75,7 @@ export function QuizQuestions(props) {
     return (
         <div className="quizQuestions">
             {makeQuestionComponents()}
-            <QuizResult nbrOfQuestions={quizQuestionDisplayable.length}/>
+            <QuizResult scoreFunction={setIsScored} scored={isScored} questions={quizQuestionsDisplayable}/>
         </div>
     )
 }
