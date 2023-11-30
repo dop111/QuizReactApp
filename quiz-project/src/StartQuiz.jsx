@@ -11,7 +11,7 @@ export function StartQuiz(props) {
         <>
             <div id="StartQuizContainer">
                 <h1>Quizzical</h1>
-                <h3>Some description if needed</h3>
+                <h3>A simple quiz application</h3>
                 <button tye="Button" onClick={clickHandler}>Start Quiz</button>
             </div>  
         </>
