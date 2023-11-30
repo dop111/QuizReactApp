@@ -8,10 +8,17 @@ function QuizResult(props) {
         props.scoreFunction((prevScored) => !prevScored)
     }
 
+    function playAgainClickHandler() {
+        //Re-render App.jsx (get new questions)
+        props.setGameState((prevState) => {
+            return prevState==="Started"?"StartedAgain":"Started"
+        })
+    }
+
     function countCorrect() {
         return props.questions.filter(
             (q)=>{
-                return q.getSelectedAnswer()[0].answer === q.correct_answer
+                return q.getSelectedAnswer().length>0?q.getSelectedAnswer()[0].answer === q.correct_answer:false
             }
         ).length
     }
@@ -20,7 +27,7 @@ function QuizResult(props) {
         <div id="resultsContainer">
             {!props.scored&&<button type="button" id="checkAnswerBtn" onClick={clickHandler}>Check answers</button>}
             {props.scored&&<h3 id="resultsText">You scored {countCorrect()}/{props.questions.length} correct answers</h3>}
-            {props.scored&&<button id="resultsPlayAgainBtn" type="button" onClick={clickHandler}>Play again</button>}
+            {props.scored&&<button id="resultsPlayAgainBtn" type="button" onClick={playAgainClickHandler}>Play again</button>}
         </div>
     )
 }
@@ -33,11 +40,17 @@ export function QuizQuestions(props) {
     //Update the state (useState will only initialize the first time around - this will make sure it's updated even if it's null first time)
     useEffect(() => {
         if (props.quizQuestions) {
-            setQuizQuestionObjects(props.quizQuestions);
+            setQuizQuestionObjects(props.quizQuestions)
+            setIsScored(false)
         }
       }, [props.quizQuestions])
 
     function selectAnswer(questionParam, answer) {
+
+        if (isScored) {
+            return;
+        }
+
         function selectAnswerOnQuestionHelper(question,answer) {
             return (
                 {
@@ -75,7 +88,7 @@ export function QuizQuestions(props) {
     return (
         <div className="quizQuestions">
             {makeQuestionComponents()}
-            <QuizResult scoreFunction={setIsScored} scored={isScored} questions={quizQuestionsDisplayable}/>
+            <QuizResult scoreFunction={setIsScored} scored={isScored} questions={quizQuestionsDisplayable} setGameState={props.setGameState}/>
         </div>
     )
 }

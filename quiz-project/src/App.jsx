@@ -8,6 +8,8 @@ export function App() {
     
     const [questions, setQuestions] = useState([])
 
+    const [gameState, setGameState] = useState("NotStarted")
+
     function turnAnswerToObjectHelper(s) {
         return {answer:s,isSelected:false}
     }
@@ -69,13 +71,13 @@ export function App() {
 
             return () => abortController.abort();
         }
-    ,[])
+    ,[gameState])
 
     return (
         <>
             <BgImages/>
-            {/* <StartQuiz/> */}
-            <QuizQuestions quizQuestions={questions}/>
+            {gameState==="NotStarted"&&<StartQuiz setGameState={setGameState}/>}
+            {gameState.slice(0,7)==="Started"&&<QuizQuestions quizQuestions={questions} setGameState={setGameState}/>}
         </>
     )
 }

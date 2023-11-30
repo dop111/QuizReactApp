@@ -1,6 +1,5 @@
 import "./QuizQuestion.css"
 import ReactHtmlParser from 'html-react-parser';
-import { useEffect, useState } from "react"
 
 function AnswerOption(props) {
 
@@ -22,8 +21,14 @@ function AnswerOption(props) {
         } else if (props.isScored && props.isSelected) {
             style = {
                 borderStyle : "none",
-                backgroundColor: "#F8BCBC"
+                backgroundColor: "#F8BCBC",
+                opacity: "0.6"
             }
+        }
+
+        style = {
+            ...style,
+            cursor: props.isScored?"default":"pointer"
         }
 
         return style;
